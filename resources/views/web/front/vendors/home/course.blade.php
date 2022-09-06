@@ -115,6 +115,24 @@
         $('.alterSuccesscourse').append(opSuccess);
         }
       },
+      error:function(error2){
+        if(error2){
+            if(error2.responseJSON.errors.email){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.email+'</div>';
+            }
+            if(error2.responseJSON.errors.faculty){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.faculty+'</div>';
+            }
+            if(error2.responseJSON.errors.name){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.name+'</div>';
+            }
+            if(error2.responseJSON.errors.phone){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.phone+'</div>';
+            }
+            $('.alterSuccesscourse').html(" ");
+            $('.alterSuccesscourse').append(opError);
+        }
+      }
       });
     });
 </script>
