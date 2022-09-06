@@ -26,7 +26,7 @@
                 <td class="align-middle">{{$apply->name}}</td>
                 <td class="align-middle">{{$apply->phone}}</td>
                 <td class="align-middle">{{$apply->email}}</td>
-                <td class="align-middle">{{$apply->Faculty}}</td>
+                <td class="align-middle">{{$apply->faculty}}</td>
                 <td class="align-middle"><span class="btn btn-info w-40 m-2">{{$apply->Courses->title}}</span></td>
                 <td class="align-middle">
                     <form action="{{url('/applynows/'.$apply->id)}}" method="post">

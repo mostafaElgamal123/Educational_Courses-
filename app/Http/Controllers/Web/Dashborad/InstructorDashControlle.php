@@ -23,7 +23,7 @@ class InstructorDashControlle extends Controller
      */
     public function index()
     {
-        $instructor=Instructor::with('categories','courses')->paginate(2);
+        $instructor=Instructor::with('categories','courses')->paginate(6);
         return view('web.dashborad.instructors.index',compact('instructor'));
     }
 

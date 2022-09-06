@@ -34,7 +34,7 @@
                     <ul class="list-group list-group-flush">
                         @foreach($category as $cate)
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <a href="" class="text-decoration-none h6 m-0">{{$cate->name}}</a>
+                            <a href="{{url('categories/'.$cate->id)}}" class="text-decoration-none h6 m-0">{{$cate->name}}</a>
                             <span class="badge badge-primary badge-pill">{{$cate->courses->count()}}</span>
                         </li>
                         @endforeach
