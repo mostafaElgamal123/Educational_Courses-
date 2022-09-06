@@ -24,6 +24,6 @@ class ApplyNowControlle extends Controller
         $applynow->faculty=$request->faculty;
         $applynow->course_id=$request->course_id;
         $applynow->save();
-        return response()->json(['success'=>'Thank you for Apply Now. we will contact you shortly.']);
+        return back()->with('success','Thank you for Apply Now. we will contact you shortly.');
     }
 }
