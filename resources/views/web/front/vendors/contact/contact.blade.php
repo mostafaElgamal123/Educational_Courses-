@@ -97,24 +97,6 @@
         $('.alterSuccess').append(opSuccess);
         }
       },
-      error:function(error1){
-        if(error1){
-            if(isset(error1.responseJSON.errors.name)){
-                opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.name+'</div>';
-            }
-            if(isset(error1.responseJSON.errors.email)){
-                opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.email+'</div>';
-            }
-            if(isset(error1.responseJSON.errors.subject)){
-                opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.subject+'</div>';
-            }
-            if(isset(error1.responseJSON.errors.message)){
-                opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.message+'</div>';
-            }
-            $('.alterSuccess').html(" ");
-            $('.alterSuccess').append(opError);
-        }
-      }
       });
     });
 </script>

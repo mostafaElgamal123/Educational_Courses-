@@ -104,15 +104,7 @@
         $('.alterSuccessletter').append(opSuccess);
         }
       },
-      error:function(error4){
-        if(error4){
-            if(isset(error4.responseJSON.errors.newsletter)){
-                opError+='<div class="alert alert-danger">'+error4.responseJSON.errors.newsletter+'</div>';
-            }
-            $('.alterSuccessletter').html(" ");
-            $('.alterSuccessletter').append(opError);
-        }
-      }
+
       });
     });
 </script>
