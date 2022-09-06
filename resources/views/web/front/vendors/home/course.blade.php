@@ -85,54 +85,54 @@
 </div>
 <!-- Courses End -->
 <script>
-//   $('#ApplyForm').on('submit',function(e){
-//     e.preventDefault();
+  $('#ApplyForm').on('submit',function(e){
+    e.preventDefault();
 
-//     let name = $('#name').val();
-//     let phone = $('#phone').val();
-//     let email = $('#email').val();
-//     let faculty = $('#faculty').val();
-//     let course_id = $('#course_id').val();
-//     var opSuccess=" ";
-//     var opError=" ";
-//     $.ajax({
-//       url: "{{url('applynows')}}",
-//       type:"post",
-//       data:{
-//         "_token": "{{ csrf_token() }}",
-//         name:name,
-//         phone:phone,
-//         email:email,
-//         faculty:faculty,
-//         course_id:course_id,
-//       },
-//       success:function(response){
-//         if(response){
-//           $("#ApplyForm")[0].reset(); 
-//           //console.log(data);
-//         opSuccess+='<div class="alert alert-success">'+response.success+'</div>';
-//         $('.alterSuccesscourse').html(" ");
-//         $('.alterSuccesscourse').append(opSuccess);
-//         }
-//       },
-//       error:function(error2){
-//         if(error2){
-//             if(error2.responseJSON.errors.email){
-//                 opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.email+'</div>';
-//             }
-//             if(error2.responseJSON.errors.faculty){
-//                 opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.faculty+'</div>';
-//             }
-//             if(error2.responseJSON.errors.name){
-//                 opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.name+'</div>';
-//             }
-//             if(error2.responseJSON.errors.phone){
-//                 opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.phone+'</div>';
-//             }
-//             $('.alterSuccesscourse').html(" ");
-//             $('.alterSuccesscourse').append(opError);
-//         }
-//       }
-//       });
-//     });
+    let name = $('#name').val();
+    let phone = $('#phone').val();
+    let email = $('#email').val();
+    let faculty = $('#faculty').val();
+    let course_id = $('#course_id').val();
+    var opSuccess=" ";
+    var opError=" ";
+    $.ajax({
+      url: "{{url('applynows')}}",
+      type:"post",
+      data:{
+        "_token": "{{ csrf_token() }}",
+        name:name,
+        phone:phone,
+        email:email,
+        faculty:faculty,
+        course_id:course_id,
+      },
+      success:function(response){
+        if(response){
+          $("#ApplyForm")[0].reset(); 
+          //console.log(data);
+        opSuccess+='<div class="alert alert-success">'+response.success+'</div>';
+        $('.alterSuccesscourse').html(" ");
+        $('.alterSuccesscourse').append(opSuccess);
+        }
+      },
+      error:function(error2){
+        if(error2){
+            if(error2.responseJSON.errors.email){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.email+'</div>';
+            }
+            if(error2.responseJSON.errors.faculty){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.faculty+'</div>';
+            }
+            if(error2.responseJSON.errors.name){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.name+'</div>';
+            }
+            if(error2.responseJSON.errors.phone){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.phone+'</div>';
+            }
+            $('.alterSuccesscourse').html(" ");
+            $('.alterSuccesscourse').append(opError);
+        }
+      }
+      });
+    });
 </script>

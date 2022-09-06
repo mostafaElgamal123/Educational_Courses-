@@ -79,6 +79,7 @@
                             <div class="alterError">
 
                             </div>
+                            <input type="hidden" value="{{$course[0]->id}}" id="course_id" class="form-control" name="course_id" />
                             <div class="form-group mb-3">
                                 <label for="name">Full Name</label>
                                 <input type="text" value="{{old('name')}}" id="name" class="form-control" name="name" />
@@ -95,7 +96,6 @@
                                 <label for="Phone">Faculty</label>
                                 <input type="text" value="{{old('faculty')}}" id="faculty" class="form-control" name="faculty" />
                             </div>
-                            <input type="hidden" value="{{$course[0]->id}}" id="course_id" class="form-control" name="course_id" />
                             <div class="form-group mb-3">
                                 <button type="submit" class="btn btn-success btn-block">Apply Now</button>
                             </div>
