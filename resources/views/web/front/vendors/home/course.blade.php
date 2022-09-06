@@ -84,8 +84,6 @@
     </div>
 </div>
 <!-- Courses End -->
-
-@section('script1')
 <script>
   $('#ApplyForm').on('submit',function(e){
     e.preventDefault();
@@ -117,19 +115,19 @@
         $('.alterSuccesscourse').append(opSuccess);
         }
       },
-      error:function(error){
-        if(error){
-            if(error.responseJSON.errors.email){
-                opError+='<div class="alert alert-danger">'+error.responseJSON.errors.email+'</div>';
+      error:function(error2){
+        if(error2){
+            if(error2.responseJSON.errors.email){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.email+'</div>';
             }
-            if(error.responseJSON.errors.faculty){
-                opError+='<div class="alert alert-danger">'+error.responseJSON.errors.faculty+'</div>';
+            if(error2.responseJSON.errors.faculty){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.faculty+'</div>';
             }
-            if(error.responseJSON.errors.name){
-                opError+='<div class="alert alert-danger">'+error.responseJSON.errors.name+'</div>';
+            if(error2.responseJSON.errors.name){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.name+'</div>';
             }
-            if(error.responseJSON.errors.phone){
-                opError+='<div class="alert alert-danger">'+error.responseJSON.errors.phone+'</div>';
+            if(error2.responseJSON.errors.phone){
+                opError+='<div class="alert alert-danger">'+error2.responseJSON.errors.phone+'</div>';
             }
             $('.alterSuccesscourse').html(" ");
             $('.alterSuccesscourse').append(opError);
@@ -138,5 +136,3 @@
       });
     });
 </script>
-
-@endsection
