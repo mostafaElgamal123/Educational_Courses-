@@ -13,7 +13,7 @@ class ApplyNow extends Model
         'name', 
         'phone',
         'email',
-        'Faculty',
+        'faculty',
         'course_id'
     ];
     public function courses(){

@@ -18,7 +18,7 @@ class CreateApplyNowsTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('email');
-            $table->string('Faculty');
+            $table->string('faculty');
             $table->foreignId('course_id')->constrained('courses');
             $table->timestamps();
         });
