@@ -144,16 +144,16 @@
       },
       error:function(error3){
         if(error3){
-            if(error3.responseJSON.errors.email){
+            if(isset(error3.responseJSON.errors.email)){
                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.email+'</div>';
             }
-            if(error3.responseJSON.errors.faculty){
+            if(isset(error3.responseJSON.errors.faculty)){
                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.faculty+'</div>';
             }
-            if(error3.responseJSON.errors.name){
+            if(isset(error3.responseJSON.errors.name)){
                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.name+'</div>';
             }
-            if(error3.responseJSON.errors.phone){
+            if(isset(error3.responseJSON.errors.phone)){
                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.phone+'</div>';
             }
             $('.alterSuccess').html(" ");

@@ -104,10 +104,10 @@
         $('.alterSuccessletter').append(opSuccess);
         }
       },
-      error:function(error){
-        if(error){
-            if(error.responseJSON.errors.newsletter){
-                opError+='<div class="alert alert-danger">'+error.responseJSON.errors.newsletter+'</div>';
+      error:function(error4){
+        if(error4){
+            if(isset(error4.responseJSON.errors.newsletter)){
+                opError+='<div class="alert alert-danger">'+error4.responseJSON.errors.newsletter+'</div>';
             }
             $('.alterSuccessletter').html(" ");
             $('.alterSuccessletter').append(opError);

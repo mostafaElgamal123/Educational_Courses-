@@ -99,16 +99,16 @@
       },
       error:function(error1){
         if(error1){
-            if(error1.responseJSON.errors.name){
+            if(isset(error1.responseJSON.errors.name)){
                 opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.name+'</div>';
             }
-            if(error1.responseJSON.errors.email){
+            if(isset(error1.responseJSON.errors.email)){
                 opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.email+'</div>';
             }
-            if(error1.responseJSON.errors.subject){
+            if(isset(error1.responseJSON.errors.subject)){
                 opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.subject+'</div>';
             }
-            if(error1.responseJSON.errors.message){
+            if(isset(error1.responseJSON.errors.message)){
                 opError+='<div class="alert alert-danger">'+error1.responseJSON.errors.message+'</div>';
             }
             $('.alterSuccess').html(" ");
