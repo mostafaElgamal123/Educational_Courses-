@@ -72,10 +72,9 @@
                         <div class="border p-2 my-2">
                             <img src="{{asset('Images/course/'.$course[0]->image)}}" class="w-100" alt="">
                         </div>
-                        <form id="ApplyForm" action="{{url('applynows')}}" method="post">
-                            @csrf
+                        <form id="ApplyForm">
                             <div class="alterSuccess">
-                            @include('web.dashborad.layout.message')
+
                             </div>
                             <div class="alterError">
 
@@ -113,54 +112,54 @@
 </section>
 <!-- End intro Courses -->
 <script>
-//   $('#ApplyForm').on('submit',function(e){
-//     e.preventDefault();
+  $('#ApplyForm').on('submit',function(e){
+    e.preventDefault();
 
-//     let name = $('#name').val();
-//     let phone = $('#phone').val();
-//     let email = $('#email').val();
-//     let faculty = $('#faculty').val();
-//     let course_id = $('#course_id').val();
-//     var opSuccess=" ";
-//     var opError=" ";
-//     $.ajax({
-//       url: "{{url('applynows')}}",
-//       type:"post",
-//       data:{
-//         "_token": "{{ csrf_token() }}",
-//         name:name,
-//         phone:phone,
-//         email:email,
-//         faculty:faculty,
-//         course_id:course_id,
-//       },
-//       success:function(response){
-//         if(response){
-//           $("#ApplyForm")[0].reset(); 
-//           //console.log(data);
-//         opSuccess+='<div class="alert alert-success">'+response.success+'</div>';
-//         $('.alterSuccess').html(" ");
-//         $('.alterSuccess').append(opSuccess);
-//         }
-//       },
-//       error:function(error3){
-//         if(error3){
-//             if(error3.responseJSON.errors.email){
-//                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.email+'</div>';
-//             }
-//             if(error3.responseJSON.errors.faculty){
-//                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.faculty+'</div>';
-//             }
-//             if(error3.responseJSON.errors.name){
-//                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.name+'</div>';
-//             }
-//             if(error3.responseJSON.errors.phone){
-//                 opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.phone+'</div>';
-//             }
-//             $('.alterSuccess').html(" ");
-//             $('.alterSuccess').append(opError);
-//         }
-//       }
-//       });
-//     });
+    let name = $('#name').val();
+    let phone = $('#phone').val();
+    let email = $('#email').val();
+    let faculty = $('#faculty').val();
+    let course_id = $('#course_id').val();
+    var opSuccess=" ";
+    var opError=" ";
+    $.ajax({
+      url: "{{url('applynows')}}",
+      type:"post",
+      data:{
+        "_token": "{{ csrf_token() }}",
+        name:name,
+        phone:phone,
+        email:email,
+        faculty:faculty,
+        course_id:course_id,
+      },
+      success:function(response){
+        if(response){
+          $("#ApplyForm")[0].reset(); 
+          //console.log(data);
+        opSuccess+='<div class="alert alert-success">'+response.success+'</div>';
+        $('.alterSuccess').html(" ");
+        $('.alterSuccess').append(opSuccess);
+        }
+      },
+      error:function(error3){
+        if(error3){
+            if(error3.responseJSON.errors.email){
+                opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.email+'</div>';
+            }
+            if(error3.responseJSON.errors.faculty){
+                opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.faculty+'</div>';
+            }
+            if(error3.responseJSON.errors.name){
+                opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.name+'</div>';
+            }
+            if(error3.responseJSON.errors.phone){
+                opError+='<div class="alert alert-danger">'+error3.responseJSON.errors.phone+'</div>';
+            }
+            $('.alterSuccess').html(" ");
+            $('.alterSuccess').append(opError);
+        }
+      }
+      });
+    });
 </script>

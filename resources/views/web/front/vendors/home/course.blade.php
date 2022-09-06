@@ -37,37 +37,36 @@
         <div class="col-lg-6 py-5">
             <div class="bg-white p-5 my-5">
                 <h1 class="text-center mb-4">Apply Now</h1>
-                <form id="ApplyForm" action="{{url('applynows')}}" method="post">
-                    @csrf
+                <form id="ApplyForm">
                     <div class="alterSuccesscourse">
-                        @include('web.dashborad.layout.message')
+
                     </div>
                     <div class="form-row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" name="name" value="{{old('name')}}" class="form-control bg-light border-0" placeholder="Your Name" style="padding: 30px 20px;">
+                                <input type="text" id="name" value="{{old('name')}}" class="form-control bg-light border-0" placeholder="Your Name" style="padding: 30px 20px;">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="email" name="email" value="{{old('email')}}" class="form-control bg-light border-0" placeholder="Your Email" style="padding: 30px 20px;">
+                                <input type="email" id="email" value="{{old('email')}}" class="form-control bg-light border-0" placeholder="Your Email" style="padding: 30px 20px;">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" name="phone" value="{{old('phone')}}" class="form-control bg-light border-0" placeholder="Your Phone" style="padding: 30px 20px;">
+                                <input type="text" id="phone" value="{{old('phone')}}" class="form-control bg-light border-0" placeholder="Your Phone" style="padding: 30px 20px;">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" name="faculty" value="{{old('faculty')}}" class="form-control bg-light border-0" placeholder="Your Faculty" style="padding: 30px 20px;">
+                                <input type="text" id="faculty" value="{{old('faculty')}}" class="form-control bg-light border-0" placeholder="Your Faculty" style="padding: 30px 20px;">
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <select name="course_id" value="{{old('course_id')}}" class="custom-select bg-light border-0 px-3" style="height: 60px;">
+                                <select id="course_id" value="{{old('course_id')}}" class="custom-select bg-light border-0 px-3" style="height: 60px;">
                                     <option selected>Select A courses</option>
                                     @foreach($course as $cours)
                                     <option value="{{$cours->id}}">{{$cours->title}}</option>

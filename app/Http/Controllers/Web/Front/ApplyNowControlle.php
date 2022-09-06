@@ -17,13 +17,13 @@ class ApplyNowControlle extends Controller
     public function store(ApplyNowRequest $request)
     {
         $request->validated();
-        $applynow= ApplyNow::create();
-        // $applynow->name=$request->name;
-        // $applynow->phone=$request->phone;
-        // $applynow->email=$request->email;
-        // $applynow->faculty=$request->faculty;
-        // $applynow->course_id=$request->course_id;
-        // $applynow->save();
-        return back()->with('success','Thank you for Apply Now. we will contact you shortly.');
+        $applynow= new ApplyNow();
+        $applynow->name=$request->name;
+        $applynow->phone=$request->phone;
+        $applynow->email=$request->email;
+        $applynow->faculty=$request->faculty;
+        $applynow->course_id=$request->course_id;
+        $applynow->save();
+        return response()->json(['success'=>'Thank you for Apply Now. we will contact you shortly.']);
     }
 }
