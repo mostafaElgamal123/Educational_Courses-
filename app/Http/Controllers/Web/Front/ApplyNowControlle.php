@@ -17,7 +17,7 @@ class ApplyNowControlle extends Controller
     public function store(ApplyNowRequest $request)
     {
         $request->validated();
-        $applynow= ApplyNow::create($request->all());
+        $applynow= ApplyNow::create();
         // $applynow->name=$request->name;
         // $applynow->phone=$request->phone;
         // $applynow->email=$request->email;
