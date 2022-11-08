@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
                 <div class="position-relative h-100">
-                    <img class="position-absolute w-100 h-100" src="<?php if(isset($about->image)):?> {{url('Images/about/'.$about->image)}} <?php endif; ?>" style="object-fit: cover;">
+                    <img class="position-absolute w-100 h-100" src="<?php if(isset($about->image)):?> {{asset('storage/'.$about->image)}} <?php endif; ?>" style="object-fit: cover;">
                 </div>
             </div>
             <div class="col-lg-7">

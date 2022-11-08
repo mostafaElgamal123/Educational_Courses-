@@ -32,7 +32,11 @@ class ApplyNowDashControlle extends Controller
      */
     public function destroy(ApplyNow $applynow)
     {
-        $applynow->delete();
-        return back()->with('success','date deleted successfully');
+        if($applynow->delete()){
+            return response()->json([
+                'success' => 'Record deleted successfully!',
+                'id'      =>  $applynow->id
+            ]);
+        }
     }
 }

@@ -127,7 +127,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
-        return back()->with('success','date deleted successfully');
+        if(User::find($id)->delete()){
+            return response()->json([
+                'success' => 'Record deleted successfully!',
+                'id'      =>  $id
+            ]);
+        }
     }
 }

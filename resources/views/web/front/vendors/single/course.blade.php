@@ -8,14 +8,14 @@
                         <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Course Detail</h6>
                         <h1 class="display-4">{{$course->title}}</h1>
                     </div>
-                    <img class="img-fluid rounded w-100 mb-4" src="{{url('Images/course/'.$course->image)}}" alt="Image">
+                    <img class="img-fluid rounded w-100 mb-4" src="{{asset('storage/'.$course->image)}}" alt="Image">
                     <?php echo $course->description; ?>
                 </div>
                 <h2 class="mb-3">Related Courses</h2>
                 <div class="owl-carousel related-carousel position-relative" style="padding: 0 30px;">
                 @foreach($related_course as $related)
-                    <a class="courses-list-item position-relative d-block overflow-hidden mb-2" href="{{url('courses/'.$related->id)}}">
-                        <img class="img-fluid" src="{{url('Images/course/'.$related->image)}}" alt="">
+                    <a class="courses-list-item position-relative d-block overflow-hidden mb-2" href="{{url('courses/'.$related->slug)}}">
+                        <img class="img-fluid" src="{{asset('storage/'.$related->image)}}" alt="">
                         <div class="courses-text">
                             <h4 class="text-center text-white px-3">{{$related->title}}</h4>
                             <div class="border-top w-100 mt-3">
@@ -62,7 +62,7 @@
                     <h5 class="text-white py-3 px-4 m-0">Offer: {{$course->discount}} % OFF</h5>
                     @endif
                     <div class="py-3 px-4">
-                        <a class="btn btn-block btn-secondary py-3 px-5" href="{{URL('checkouts/'.$course->id)}}">Enroll Now</a>
+                        <a class="btn btn-block btn-secondary py-3 px-5" href="{{URL('checkouts/'.$course->slug)}}">Enroll Now</a>
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                     <ul class="list-group list-group-flush">
                         @foreach($category as $cate)
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <a href="{{url('categories/'.$cate->id)}}" class="text-decoration-none h6 m-0">{{$cate->name}}</a>
+                            <a href="{{url('categories/'.$cate->slug)}}" class="text-decoration-none h6 m-0">{{$cate->name}}</a>
                             <span class="badge badge-primary badge-pill">{{$cate->courses->count()}}</span>
                         </li>
                         @endforeach
@@ -82,7 +82,7 @@
                     <h2 class="mb-4">Recent Courses</h2>
                     @foreach($course_recent as $course_rece)
                     <a class="d-flex align-items-center text-decoration-none mb-4" href="{{url('courses/'.$course_rece->id)}}">
-                        <img class="img-fluid rounded" style="width: 80px;" src="{{url('Images/course/'.$course_rece->image)}}" alt="">
+                        <img class="img-fluid rounded" style="width: 80px;" src="{{asset('storage/'.$course_rece->image)}}" alt="">
                         <div class="pl-3">
                             <h6>{{$course_rece->title}}</h6>
                             <div class="d-flex">

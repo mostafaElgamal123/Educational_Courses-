@@ -32,8 +32,12 @@ class ContactDashControlle extends Controller
      */
     public function destroy(Contact $contact)
     {
-        $contact->delete();
-        return back()->with('success','date deleted successfully');
+        if($contact->delete()){
+            return response()->json([
+                'success' => 'Record deleted successfully!',
+                'id'      =>  $contact->id
+            ]);
+        }
     }
 
 }

@@ -6,8 +6,8 @@
                 <div class="row">
                 @foreach($course as $cours)
                 <div class="col-lg-6 col-md-6 pb-4">
-                    <a class="courses-list-item position-relative d-block overflow-hidden mb-2" href="{{url('courses/'.$cours->id)}}">
-                        <img class="img-fluid" src="{{url('Images/course/'.$cours->image)}}" alt="">
+                    <a class="courses-list-item position-relative d-block overflow-hidden mb-2" href="{{url('courses/'.$cours->slug)}}">
+                        <img class="img-fluid" src="{{asset('storage/'.$cours->image)}}" alt="">
                         <div class="courses-text">
                             <h4 class="text-center text-white px-3">{{$cours->title}}</h4>
                             <div class="border-top w-100 mt-3">
@@ -34,7 +34,7 @@
                     <ul class="list-group list-group-flush">
                         @foreach($category as $cate)
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <a href="{{url('categories/'.$cate->id)}}" class="text-decoration-none h6 m-0">{{$cate->name}}</a>
+                            <a href="{{url('categories/'.$cate->slug)}}" class="text-decoration-none h6 m-0">{{$cate->name}}</a>
                             <span class="badge badge-primary badge-pill">{{$cate->courses->count()}}</span>
                         </li>
                         @endforeach
@@ -44,8 +44,8 @@
                 <div class="mb-5">
                     <h2 class="mb-4">Recent Courses</h2>
                     @foreach($course_recent as $course_rece)
-                    <a class="d-flex align-items-center text-decoration-none mb-4" href="{{url('courses/'.$course_rece->id)}}">
-                        <img class="img-fluid rounded" style="width: 80px;" src="{{url('Images/course/'.$course_rece->image)}}" alt="">
+                    <a class="d-flex align-items-center text-decoration-none mb-4" href="{{url('courses/'.$course_rece->slug)}}">
+                        <img class="img-fluid rounded" style="width: 80px;" src="{{asset('storage/'.$course_rece->image)}}" alt="">
                         <div class="pl-3">
                             <h6>{{$course_rece->title}}</h6>
                             <div class="d-flex">

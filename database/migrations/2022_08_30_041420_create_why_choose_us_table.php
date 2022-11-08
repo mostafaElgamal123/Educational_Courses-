@@ -16,6 +16,7 @@ class CreateWhyChooseUsTable extends Migration
         Schema::create('why_choose_us', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug');
             $table->longText('description');
             $table->longText('image');
             $table->string('icon_1')->default('fa fa-2x fa-graduation-cap');

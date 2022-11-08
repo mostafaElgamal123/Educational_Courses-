@@ -15,7 +15,7 @@
                             aria-haspopup="true" aria-expanded="false">Courses</button>
                         <div class="dropdown-menu">
                             @foreach($course_search as $course_sear)
-                            <a class="dropdown-item" href="{{url('courses/'.$course_sear->id)}}">{{$course_sear->title}}</a>
+                            <a class="dropdown-item" href="{{url('courses/'.$course_sear->slug)}}">{{$course_sear->title}}</a>
                             @endforeach
                         </div>
                     </div>

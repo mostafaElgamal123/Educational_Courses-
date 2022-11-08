@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\About;
 use App\Http\Requests\Web\Dashborad\AboutRequest;
+use Storage;
+use Illuminate\Support\Str;
 class AboutDashControlle extends Controller
 {
     function __construct()
@@ -54,12 +56,14 @@ class AboutDashControlle extends Controller
         $request->validated();
         $about=new About;
         if($about->count()<1):
-            $about=About::create($request->all());
-            if($request->file('image')){
+            if($request->hasFile('image')){
                 $file= $request->file('image');
-                $filename= date('YmdHi').$file->getClientOriginalName();
-                $file-> move(public_path('/Images/about'), $filename);
-                $about->image= $filename;
+                $destination_path='images/about/';
+                $filename=date('YmdHi').$file->getClientOriginalName();
+                $path =$request->file('image')->storeAs($destination_path,$filename);
+                $about=About::create($request->all());
+                $about->image= $path;
+                $about->slug=Str::of($request->slug)->slug('-');
                 $about->save();
             }
             $about=About::all();
@@ -76,9 +80,9 @@ class AboutDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $about=About::where('id',$id)->first();
+        $about=About::where('slug',$slug)->first();
         return view('web.dashborad.about.show',compact('about'));
     }
 
@@ -88,8 +92,9 @@ class AboutDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(About $about)
+    public function edit($slug)
     {
+        $about=About::where('slug',$slug)->first();
         return view('web.dashborad.about.edit',compact('about'));
     }
 
@@ -100,23 +105,22 @@ class AboutDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AboutRequest $request,About $about)
+    public function update(AboutRequest $request,$slug)
     {
+        $about=About::where('slug',$slug)->first();
         // Retrieve the validated input data...
         $request->validated();
-        if($request->has('image')){
-            $file1= $request->file('image');
-            $filename1= date('YmdHi').$file1->getClientOriginalName();
-            $file1-> move(public_path('/Images/about'), $filename1);
-            $image_path1 = public_path('/Images/about').'/'.$about->image;
-            if(file_exists($image_path1)):
-               unlink($image_path1);
-            endif;
+        if($request->hasFile('image')){
+            $file= $request->file('image');
+            $destination_path='images/about/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            if(Storage::delete($about->image)){
             $about->update($request->all());
-            $about->image= $filename1;
+            $about->image= $path;
+            $about->slug=Str::of($request->slug)->slug('-');
             $about->save();
-        }else{
-            $about=About::update($request->all());
+        }
         }
         return back()->with('success','date updated successfully');
     }
@@ -127,13 +131,17 @@ class AboutDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(About $about)
+    public function destroy($slug)
     {
-        $image_path = public_path('/Images/about').'/'.$about->image;
-        if(file_exists($image_path)):
-            unlink($image_path);
-        endif;
-        $about->delete();
-        return back()->with('success','date deleted successfully');
+        $about=About::where('slug',$slug)->first();
+        if(Storage::delete($about->image)) {
+            if($about->delete()){
+                return response()->json([
+                    'success' => 'Record deleted successfully!',
+                    'id'      =>  $about->id
+                ]);
+            }
+         }
+        
     }
 }

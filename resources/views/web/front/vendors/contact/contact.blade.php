@@ -43,6 +43,9 @@
                     <div class="alterSuccess">
 
                     </div>
+                    <div id="ring_contact" class="ring">Loading
+                       <span></span>
+                    </div>
                     <form id="SubmitFormhome">
                         <div class="row">
                             <div class="col-6 form-group">
@@ -114,7 +117,9 @@
             $('.alterSuccess').html(" ");
             $('.alterSuccess').append(opError);
         }
-      }
+      },
+      beforeSend: function() { $('#ring_contact').show(); },
+      complete: function() { $('#ring_contact').hide(); }
       });
     });
 </script>

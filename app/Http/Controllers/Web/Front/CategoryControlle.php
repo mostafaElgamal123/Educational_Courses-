@@ -23,8 +23,9 @@ class CategoryControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show($slug)
     {
+        $category=Category::where('slug',$slug)->first();
         $course_recent=Course::with('instructors')->where('status','publish')->orderby('created_at', 'DESC')->take(5)->get();
         $course=Course::with('instructors')->where('category_id',$category->id)->paginate(6);
         $category=Category::with('courses')->whereHas('courses')->get();

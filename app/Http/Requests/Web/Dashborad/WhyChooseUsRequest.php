@@ -26,7 +26,7 @@ class WhyChooseUsRequest extends FormRequest
         return [
             'title'                                 =>'required|min:3|max:150',
             'description'                           =>'required|min:3|max:10000',
-            'image'                                 =>'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image'                                 =>'required|mimes:webp|max:1000',
             'icon_1'                                =>'required|min:3|max:150',
             'icon_2'                                =>'required|min:3|max:150',
             'icon_3'                                =>'required|min:3|max:150',
@@ -35,7 +35,8 @@ class WhyChooseUsRequest extends FormRequest
             'International_Certificate_title'       =>'required|min:3|max:150',
             'International_Certificate_description' =>'required|min:3|max:1000',
             'Online_Classes_title'                  =>'required|min:3|max:150',
-            'Online_Classes_description'            =>'required|min:3|max:1000'
+            'Online_Classes_description'            =>'required|min:3|max:1000',
+            'slug'                =>'required|min:3|max:150'
         ];
     }
 }

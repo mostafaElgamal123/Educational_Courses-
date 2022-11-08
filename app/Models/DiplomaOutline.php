@@ -11,6 +11,7 @@ class DiplomaOutline extends Model
     protected $fillable = [
         'id',
         'level',
+        'slug',
         'content',
         'course_id'
     ];

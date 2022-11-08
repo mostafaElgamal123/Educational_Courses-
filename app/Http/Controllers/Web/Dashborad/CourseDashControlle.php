@@ -10,6 +10,8 @@ use App\Models\Category;
 use App\Models\Testimonial;
 use App\Models\Feedback;
 use App\Http\Requests\Web\Dashborad\CourseRequest;
+use Storage;
+use Illuminate\Support\Str;
 class CourseDashControlle extends Controller
 {
     function __construct()
@@ -50,12 +52,14 @@ class CourseDashControlle extends Controller
     public function store(CourseRequest $request)
     {
         $request->validated();
-        $course=Course::create($request->all());
-        if($request->file('image')){
+        if($request->hasFile('image')){
             $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('/Images/course'), $filename);
-            $course->image= $filename;
+            $destination_path='images/course/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            $course=Course::create($request->all());
+            $course->image= $path;
+            $course->slug=Str::of($request->slug)->slug('-');
             $course->save();
         }
         return back()->with('success','date added successfully');
@@ -67,8 +71,9 @@ class CourseDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show($slug)
     {
+        $course=Course::where('slug',$slug)->first();
         $testimonial=Testimonial::all();
         $feedback=Feedback::all();
         return view('web.dashborad.courses.show',compact('course','testimonial','feedback'));
@@ -80,8 +85,9 @@ class CourseDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Course $course)
+    public function edit($slug)
     {
+        $course=Course::where('slug',$slug)->first();
         $category=Category::all();
         return view('web.dashborad.courses.edit',compact('course','category'));
     }
@@ -93,23 +99,22 @@ class CourseDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CourseRequest $request,Course $course)
+    public function update(CourseRequest $request,$slug)
     {
+        $course=Course::where('slug',$slug)->first();
         // Retrieve the validated input data...
         $request->validated();
-        if($request->has('image')){
-            $file1= $request->file('image');
-            $filename1= date('YmdHi').$file1->getClientOriginalName();
-            $file1-> move(public_path('/Images/course'), $filename1);
-            $image_path1 = public_path('/Images/course').'/'.$course->image;
-            if(file_exists($image_path1)):
-               unlink($image_path1);
-            endif;
+        if($request->hasFile('image')){
+            $file= $request->file('image');
+            $destination_path='images/course/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            if(Storage::delete($course->image)){
             $course->update($request->all());
-            $course->image= $filename1;
+            $course->image= $path;
+            $course->slug=Str::of($request->slug)->slug('-');
             $course->save();
-        }else{
-            $course=Course::update($request->all());
+        }
         }
         return back()->with('success','date updated successfully');
     }
@@ -120,14 +125,17 @@ class CourseDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy($slug)
     {
-        $image_path = public_path('/Images/course').'/'.$course->image;
-        if(file_exists($image_path)):
-            unlink($image_path);
-        endif;
-        $course->delete();
-        return back()->with('success','date deleted successfully');
+        $course=Course::where('slug',$slug)->first();
+        if(Storage::delete($course->image)) {
+            if($course->delete()){
+                return response()->json([
+                    'success' => 'Record deleted successfully!',
+                    'id'      =>  $course->id
+                ]);
+            }
+         }
     }
 
 

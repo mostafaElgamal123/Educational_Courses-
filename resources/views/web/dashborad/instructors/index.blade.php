@@ -20,6 +20,7 @@
             <th scope="col">#</th>
             <th scope="col">image</th>
             <th scope="col">name</th>
+            <th scope="col">slug</th>
             <th scope="col">email</th>
             <th scope="col">phone</th>
             <th scope="col">address</th>
@@ -37,10 +38,11 @@
     </thead>
     <tbody>
         @foreach($instructor as $instr)
-            <tr>
+            <tr id="{{$instr->id}}">
                 <th scope="row" class="align-middle">{{$loop->iteration}}</th>
-                <td class="align-middle"><img style="width:60px;height:60px;border-radius:50%;" src="{{url('/Images/instructor/'.$instr->image)}}" alt=""></td>
+                <td class="align-middle"><img style="width:60px;height:60px;border-radius:50%;" src="{{asset('storage/'.$instr->image)}}" alt=""></td>
                 <td class="align-middle">{{$instr->name}}</td>
+                <td class="align-middle">{{$instr->slug}}</td>
                 <td class="align-middle">{{$instr->email}}</td>
                 <td class="align-middle">{{$instr->phone}}</td>
                 <td class="align-middle">{{$instr->address}}</td>
@@ -64,13 +66,9 @@
                       <span class="btn btn-warning w-40 m-2">{{$instr->status}}</span> 
                     @endif
                 </td>
-                <td class="align-middle"><a href="{{url('/instructors/'.$instr->id."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
+                <td class="align-middle"><a href="{{url('/instructors/'.$instr->slug."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
                 <td class="align-middle">
-                    <form action="{{url('/instructors/'.$instr->id)}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                    </form>
+                <button class="btn btn-danger deleteRecord" data-id="{{ $instr->slug }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 </td>
             </tr>
         @endforeach
@@ -82,4 +80,25 @@
         {{ $instructor->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowslug=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/instructors/"+rowslug,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowslug: rowslug
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

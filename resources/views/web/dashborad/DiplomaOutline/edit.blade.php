@@ -14,12 +14,16 @@
 <div class="row pt-4 pb-4">
     @include('web.dashborad.layout.message')
     <div class="col-xl-8 col-12">
-        <form action="{{url('/diplomaoutlines/'.$diplomaoutline->id)}}" method="post" enctype="multipart/form-data">
+        <form action="{{url('/diplomaoutlines/'.$diplomaoutline->slug)}}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-3">
                 <label class="form-label">level</label>
                 <input type="text" name="level" value="{{$diplomaoutline->level}}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">slug</label>
+                <input type="text" name="slug" value="{{$diplomaoutline->slug}}" class="form-control">
             </div>
             <div class="mb-3">
                 <label class="form-label">Diploma Outline</label>

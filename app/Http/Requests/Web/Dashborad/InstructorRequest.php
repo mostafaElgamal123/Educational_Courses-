@@ -26,7 +26,7 @@ class InstructorRequest extends FormRequest
         return [
             'name'             =>'required|min:3|max:150',
             'email'            =>'required|email|unique:users,email',
-            'image'            =>'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image'            =>'required|mimes:webp|max:1000',
             'phone'            =>'required|numeric',
             'address'          =>'required|min:3|max:250',
             'twitter'          =>'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
@@ -34,7 +34,8 @@ class InstructorRequest extends FormRequest
             'instagram'        =>'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
             'linkedin'         =>'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
             'YouTube'          =>'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
-            'category_id'      =>'required'
+            'category_id'      =>'required',
+            'slug'                =>'required|min:3|max:150'
         ];
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimonial;
 use App\Http\Requests\Web\Dashborad\TestimonialRequest;
+use Storage;
+use Illuminate\Support\Str;
 class TestimonialDashControlle extends Controller
 {
     function __construct()
@@ -45,12 +47,14 @@ class TestimonialDashControlle extends Controller
     public function store(TestimonialRequest $request)
     {
         $request->validated();
-        $testimonial=Testimonial::create($request->all());
-        if($request->file('image')){
+        if($request->hasFile('image')){
             $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('/Images/testimonial'), $filename);
-            $testimonial->image= $filename;
+            $destination_path='images/testimonial/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            $testimonial=Testimonial::create($request->all());
+            $testimonial->image= $path;
+            $testimonial->slug=Str::of($request->slug)->slug('-');
             $testimonial->save();
         }
         return back()->with('success','date added successfully');
@@ -73,8 +77,9 @@ class TestimonialDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Testimonial $testimonial)
+    public function edit($slug)
     {
+        $testimonial=Testimonial::where('slug',$slug)->first();
         return view('web.dashborad.testimonial.edit',compact('testimonial'));
     }
 
@@ -88,19 +93,17 @@ class TestimonialDashControlle extends Controller
     public function update(TestimonialRequest $request,Testimonial $testimonial)
     {
         $request->validated();
-        if($request->has('image')){
+        if($request->hasFile('image')){
             $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('/Images/testimonial'), $filename);
-            $image_path = public_path('/Images/testimonial').'/'.$testimonial->image;
-            if(file_exists($image_path)):
-               unlink($image_path);
-            endif;
+            $destination_path='images/testimonial/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            if(Storage::delete($testimonial->image)){
             $testimonial->update($request->all());
-            $testimonial->image= $filename;
+            $testimonial->image= $path;
+            $testimonial->slug=Str::of($request->slug)->slug('-');
             $testimonial->save();
-        }else{
-            $testimonial=Testimonial::update($request->all());
+        }
         }
         return back()->with('success','date updated successfully');
     }
@@ -111,13 +114,16 @@ class TestimonialDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Testimonial $testimonial)
+    public function destroy($slug)
     {
-        $image_path = public_path('/Images/testimonial').'/'.$testimonial->image;
-        if(file_exists($image_path)):
-            unlink($image_path);
-        endif;
-        $testimonial->delete();
-        return back()->with('success','date deleted successfully');
+        $testimonial=Testimonial::where('slug',$slug)->first();
+        if(Storage::delete($testimonial->image)) {
+            if($testimonial->delete()){
+                return response()->json([
+                    'success' => 'Record deleted successfully!',
+                    'id'      =>  $testimonial->id
+                ]);
+            }
+         }
     }
 }

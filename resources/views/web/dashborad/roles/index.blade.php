@@ -26,7 +26,7 @@
         </thead>
         <tbody>
             @foreach ($roles as $key => $role)
-                <tr>
+                <tr id="{{$role->id}}">
                     <th scope="row" class="align-middle">{{$loop->iteration}}</th>
                     <td class="align-middle">{{$role->name}}</td>
                     <td class="align-middle">
@@ -36,11 +36,7 @@
                     </td>
                     <td class="align-middle">
                         @can('role-delete')
-                        <form action="{{route('roles.destroy',$role->id)}}" method="post">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                        </form>
+                        <button class="btn btn-danger deleteRecord" data-id="{{ $role->id }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                         @endcan
                     </td>
                 </tr>
@@ -53,4 +49,25 @@
         {{ $roles->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowid=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/roles/"+rowid,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowid: rowid
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

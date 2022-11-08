@@ -26,8 +26,9 @@ class TestimonialRequest extends FormRequest
         return [
             'title'       =>'required|min:3|max:150',
             'description' =>'required|min:3|max:1000',
-            'image'       =>'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status'      =>'required'
+            'image'       =>'required|mimes:webp|max:1000',
+            'status'      =>'required',
+            'slug'                =>'required|min:3|max:150'
         ];
     }
 }

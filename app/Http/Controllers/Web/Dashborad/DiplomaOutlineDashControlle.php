@@ -8,6 +8,7 @@ use App\Models\DiplomaOutline;
 use App\Models\Course;
 use App\Models\Testimonial;
 use App\Models\Feedback;
+use Illuminate\Support\Str;
 class DiplomaOutlineDashControlle extends Controller
 {
     function __construct()
@@ -50,9 +51,12 @@ class DiplomaOutlineDashControlle extends Controller
         $request->validate([
             'content'       =>'required|min:3|max:100000',
             'level'         =>'required|min:3|max:150',
-            'course_id'       =>'required'
+            'course_id'       =>'required',
+            'slug'                =>'required|min:3|max:150'
         ]);
         $diplomaoutline=DiplomaOutline::create($request->all());
+        $diplomaoutline->slug=Str::of($request->slug)->slug('-');
+        $diplomaoutline->save();
         return back()->with('success','date added successfully');
     }
 
@@ -62,9 +66,9 @@ class DiplomaOutlineDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $course=Course::with('DiplomaOutlines')->where('id',$id)->get();
+        $course=Course::with('DiplomaOutlines')->where('slug',$slug)->get();
         $testimonial=Testimonial::all();
         $feedback=Feedback::all();
         return view('web.dashborad.DiplomaOutline.show',compact('course','testimonial','feedback'));
@@ -94,9 +98,12 @@ class DiplomaOutlineDashControlle extends Controller
         $request->validate([
             'content'       =>'required|min:3|max:100000',
             'level'         =>'required|min:3|max:150',
-            'course_id'       =>'required'
+            'course_id'       =>'required',
+            'slug'                =>'required|min:3|max:150'
         ]);
         $diplomaoutline->update($request->except('token'));
+        $diplomaoutline->slug=Str::of($request->slug)->slug('-');
+        $diplomaoutline->save();
         return back()->with('success','date updated successfully');
     }
 
@@ -106,9 +113,14 @@ class DiplomaOutlineDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DiplomaOutline $diplomaoutline)
+    public function destroy($slug)
     {
-        $diplomaoutline->delete();
-        return back()->with('success','date deleted successfully');
+        $diplomaoutline=DiplomaOutline::where('slug',$slug)->first();
+        if($diplomaoutline->delete()){
+            return response()->json([
+                'success' => 'Record deleted successfully!',
+                'id'      =>  $diplomaoutline->id
+            ]);
+        }
     }
 }

@@ -20,18 +20,14 @@
     </thead>
     <tbody>
         @foreach($contact as $contac)
-            <tr>
+            <tr id="{{$contac->id}}">
                 <th scope="row" class="align-middle">{{$loop->iteration}}</th>
                 <td class="align-middle">{{$contac->name}}</td>
                 <td class="align-middle">{{$contac->email}}</td>
                 <td class="align-middle">{{$contac->subject}}</td>
                 <td class="align-middle">{{$contac->message}}</td>
                 <td class="align-middle">
-                    <form action="{{url('/contacts/'.$contac->id)}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                    </form>
+                <button class="btn btn-danger deleteRecord" data-id="{{ $contac->id }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 </td>
             </tr>
         @endforeach
@@ -43,4 +39,24 @@
         {{ $contact->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowid=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/contacts/"+rowid,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowid: rowid
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

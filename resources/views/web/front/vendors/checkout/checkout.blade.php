@@ -40,7 +40,7 @@
                                 <div class="cource-review-box mb-30">
                                     <h4>{{$testimonia->title}}</h4>
                                     <div class="rating">
-                                        <img  src="{{url('Images/testimonial/'.$testimonia->image)}}" style="height:250px;width:100%;" alt="">
+                                        <img  src="{{asset('storage/'.$testimonia->image)}}" style="height:250px;width:100%;" alt="">
                                         
                                     </div>
                                 </div>
@@ -70,7 +70,7 @@
                     <div class="course-features-info">
                         <h3 class="text-center  p-3">Apply Now</h3>
                         <div class="border p-2 my-2">
-                            <img src="{{asset('Images/course/'.$course[0]->image)}}" class="w-100" alt="">
+                            <img src="{{asset('storage/'.$course[0]->image)}}" class="w-100" alt="">
                         </div>
                         <form id="ApplyForm">
                             <div class="alterSuccess">
@@ -78,6 +78,9 @@
                             </div>
                             <div class="alterError">
 
+                            </div>
+                            <div id="ring_apply" class="ring">Loading
+                               <span></span>
                             </div>
                             <input type="hidden" value="{{$course[0]->id}}" id="course_id" class="form-control" name="course_id" />
                             <div class="form-group mb-3">
@@ -159,7 +162,9 @@
             $('.alterSuccess').html(" ");
             $('.alterSuccess').append(opError);
         }
-      }
+      },
+      beforeSend: function() { $('#ring_apply').show(); },
+      complete: function() { $('#ring_apply').hide(); }
       });
     });
 </script>

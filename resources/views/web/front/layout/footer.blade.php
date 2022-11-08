@@ -14,6 +14,9 @@
 
                     </div>
                 <div class="w-100">
+                    <div id="ring_newletter" class="ring">Loading
+                       <span></span>
+                    </div>
                     <form id="newslettersubmit">
                         <div class="input-group">
                             <input type="email" id="newsletter" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address">
@@ -42,7 +45,7 @@
                 <h3 class="text-white mb-4">Our Courses</h3>
                 <div class="d-flex flex-column justify-content-start">
                     @foreach($category as $cate)
-                    <a class="text-white-50 mb-2" href="{{url('categories/'.$cate->id)}}"><i class="fa fa-angle-right mr-2"></i>{{$cate->name}}</a>
+                    <a class="text-white-50 mb-2" href="{{url('categories/'.$cate->slug)}}"><i class="fa fa-angle-right mr-2"></i>{{$cate->name}}</a>
                     @endforeach
                 </div>
             </div>
@@ -112,7 +115,9 @@
             $('.alterSuccessletter').html(" ");
             $('.alterSuccessletter').append(opError);
         }
-      }
+      },
+      beforeSend: function() { $('#ring_newletter').show(); },
+      complete: function() { $('#ring_newletter').hide(); }
       });
     });
 </script>

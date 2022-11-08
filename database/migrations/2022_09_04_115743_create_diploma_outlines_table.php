@@ -17,6 +17,7 @@ class CreateDiplomaOutlinesTable extends Migration
             $table->id();
             $table->string('level');
             $table->longText('content');
+            $table->string('slug');
             $table->foreignId('course_id')->constrained('courses');
             $table->timestamps();
         });

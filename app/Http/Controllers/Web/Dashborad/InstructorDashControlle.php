@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Instructor;
 use App\Models\Category;
 use App\Http\Requests\Web\Dashborad\InstructorRequest;
+use Storage;
+use Illuminate\Support\Str;
 class InstructorDashControlle extends Controller
 {
     function __construct()
@@ -47,12 +49,14 @@ class InstructorDashControlle extends Controller
     public function store(InstructorRequest $request)
     {
         $request->validated();
-        $instructor=Instructor::create($request->all());
-        if($request->file('image')){
+        if($request->hasFile('image')){
             $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('/Images/instructor'), $filename);
-            $instructor->image= $filename;
+            $destination_path='images/instructor/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            $instructor=Instructor::create($request->all());
+            $instructor->image= $path;
+            $instructor->slug=Str::of($request->slug)->slug('-');
             $instructor->save();
         }
         return back()->with('success','date added successfully');
@@ -75,8 +79,9 @@ class InstructorDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Instructor $instructor)
+    public function edit($slug)
     {
+        $instructor=Instructor::where('slug',$slug)->first();
         $category=Category::all();
         return view('web.dashborad.instructors.edit',compact('instructor','category'));
     }
@@ -88,22 +93,21 @@ class InstructorDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(InstructorRequest $request,Instructor $instructor)
+    public function update(InstructorRequest $request,$slug)
     {
+        $instructor=Instructor::where('slug',$slug)->first();
         $request->validated();
-        if($request->has('image')){
+        if($request->hasFile('image')){
             $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('/Images/instructor'), $filename);
-            $image_path = public_path('/Images/instructor').'/'.$instructor->image;
-            if(file_exists($image_path)):
-               unlink($image_path);
-            endif;
+            $destination_path='images/instructor/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            if(Storage::delete($instructor->image)){
             $instructor->update($request->all());
-            $instructor->image= $filename;
+            $instructor->image= $path;
+            $instructor->slug=Str::of($request->slug)->slug('-');
             $instructor->save();
-        }else{
-            $instructor=Instructor::update($request->all());
+        }
         }
         return back()->with('success','date updated successfully');
     }
@@ -114,13 +118,16 @@ class InstructorDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Instructor $instructor)
+    public function destroy($slug)
     {
-        $image_path = public_path('/Images/instructor').'/'.$instructor->image;
-        if(file_exists($image_path)):
-            unlink($image_path);
-        endif;
-        $instructor->delete();
-        return back()->with('success','date deleted successfully');
+        $instructor=Instructor::where('slug',$slug)->first();
+        if(Storage::delete($instructor->image)) {
+            if($instructor->delete()){
+                return response()->json([
+                    'success' => 'Record deleted successfully!',
+                    'id'      =>  $instructor->id
+                ]);
+            }
+         }
     }
 }

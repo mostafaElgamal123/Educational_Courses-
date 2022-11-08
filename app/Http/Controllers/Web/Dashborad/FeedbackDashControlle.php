@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Dashborad;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Feedback;
+use Illuminate\Support\Str;
 class FeedbackDashControlle extends Controller
 {
     function __construct()
@@ -46,8 +47,11 @@ class FeedbackDashControlle extends Controller
         $request->validate([
             'feedback'       =>'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
             'status'       =>'required',
+            'slug'                =>'required|min:3|max:150'
         ]);
         $feedback=Feedback::create($request->all());
+        $feedback->slug=Str::of($request->slug)->slug('-');
+        $feedback->save();
         return back()->with('success','date added successfully');
     }
 
@@ -68,8 +72,9 @@ class FeedbackDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Feedback $feedback)
+    public function edit($slug)
     {
+        $feedback=Feedback::where('slug',$slug)->first();
         return view('web.dashborad.feedback.edit',compact('feedback'));
     }
 
@@ -80,13 +85,17 @@ class FeedbackDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Feedback $feedback)
+    public function update(Request $request,$slug)
     {
+        $feedback=Feedback::where('slug',$slug)->first();
         $request->validate([
             'feedback'       =>'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
             'status'       =>'required',
+            'slug'                =>'required|min:3|max:150'
         ]);
         $feedback->update($request->except('token'));
+        $feedback->slug=Str::of($request->slug)->slug('-');
+        $feedback->save();
         return back()->with('success','date updated successfully');
     }
 
@@ -96,9 +105,14 @@ class FeedbackDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feedback $feedback)
+    public function destroy($slug)
     {
-        $feedback->delete();
-        return back()->with('success','date deleted successfully');
+        $feedback=Feedback::where('slug',$slug)->first();
+        if($feedback->delete()){
+            return response()->json([
+                'success' => 'Record deleted successfully!',
+                'id'      =>  $feedback->id
+            ]);
+        }
     }
 }

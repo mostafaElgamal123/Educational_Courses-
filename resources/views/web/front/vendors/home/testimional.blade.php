@@ -13,9 +13,9 @@
                 <div class="owl-carousel testimonial-carousel">
                 @foreach($testimonial as $testimoni)
                     <div class="bg-light p-2">
-                        <p><img class="w-100" style="height:182px;" src="{{url('Images/testimonial/'.$testimoni->image)}}" alt=""></p>
+                        <p><img class="w-100" style="height:182px;" src="{{asset('storage/'.$testimoni->image)}}" alt=""></p>
                         <div class="d-flex flex-shrink-0 align-items-center mt-4">
-                            <img class="img-fluid mr-4" src="{{asset('assets/img/testimonial-2.jpg')}}" alt="">
+                            <img class="img-fluid mr-4" src="{{asset('assets/img/img_avatar.png')}}" alt="">
                             <div>
                                 <h5>{{$testimoni->title}}</h5>
                                 <span>{{$testimoni->description}}</span>

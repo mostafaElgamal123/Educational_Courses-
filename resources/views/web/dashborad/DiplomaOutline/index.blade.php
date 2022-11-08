@@ -18,6 +18,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">level</th>
+            <th scope="col">slug</th>
             <th scope="col">courses</th>
             <th scope="col">show</th>
             <th scope="col">edit</th>
@@ -26,20 +27,17 @@
     </thead>
     <tbody>
         @foreach($diplomaoutline as $diplomaoutli)
-            <tr>
+            <tr id="{{$diplomaoutli->id}}">
                 <th scope="row" class="align-middle">{{$loop->iteration}}</th>
                 <th scope="row" class="align-middle">{{$diplomaoutli->level}}</th>
+                <th scope="row" class="align-middle">{{$diplomaoutli->slug}}</th>
                 <td class="align-middle">
                         <span class="btn btn-success w-40 m-2">{{$diplomaoutli->courses->title}}</span>
                 </td>
-                <td class="align-middle"><a href="{{url('/diplomaoutlines/'.$diplomaoutli->id)}}" class="btn btn-primary"><i class="fas fa-folder"></i> show</a></td>
-                <td class="align-middle"><a href="{{url('/diplomaoutlines/'.$diplomaoutli->id."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
+                <td class="align-middle"><a href="{{url('/diplomaoutlines/'.$diplomaoutli->slug)}}" class="btn btn-primary"><i class="fas fa-folder"></i> show</a></td>
+                <td class="align-middle"><a href="{{url('/diplomaoutlines/'.$diplomaoutli->slug."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
                 <td class="align-middle">
-                    <form action="{{url('/diplomaoutlines/'.$diplomaoutli->id)}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                    </form>
+                <button class="btn btn-danger deleteRecord" data-id="{{ $diplomaoutli->slug }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 </td>
             </tr>
         @endforeach
@@ -51,4 +49,25 @@
         {{ $diplomaoutline->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowslug=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/diplomaoutlines/"+rowslug,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowslug: rowslug
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

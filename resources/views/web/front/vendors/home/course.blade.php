@@ -11,7 +11,7 @@
     <div class="owl-carousel courses-carousel">
     @foreach($course as $cours)
         <div class="courses-item position-relative">
-            <img class="img-fluid" src="{{url('Images/course/'.$cours->image)}}" alt="">
+            <img class="img-fluid" src="{{asset('storage/'.$cours->image)}}" alt="">
             <div class="courses-text">
                 <h4 class="text-center text-white px-3">{{$cours->title}}</h4>
                 <div class="border-top w-100 mt-3">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="w-100 bg-white text-center p-4" >
-                    <a class="btn btn-primary" href="{{url('courses/'.$cours->id)}}">Course Detail</a>
+                    <a class="btn btn-primary" href="{{url('courses/'.$cours->slug)}}">Course Detail</a>
                 </div>
             </div>
             @if(isset($cours->discount)&&$cours->discount > 0)
@@ -40,6 +40,9 @@
                 <form id="ApplyForm">
                     <div class="alterSuccesscourse">
 
+                    </div>
+                    <div id="ring_course" class="ring">Loading
+                       <span></span>
                     </div>
                     <div class="form-row">
                         <div class="col-sm-6">
@@ -132,7 +135,9 @@
             $('.alterSuccesscourse').html(" ");
             $('.alterSuccesscourse').append(opError);
         }
-      }
+      },
+      beforeSend: function() { $('#ring_course').show(); },
+      complete: function() { $('#ring_course').hide(); }
       });
     });
 </script>

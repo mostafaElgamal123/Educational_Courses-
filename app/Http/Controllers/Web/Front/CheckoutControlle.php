@@ -46,9 +46,9 @@ class CheckoutControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $course=Course::with('DiplomaOutlines')->where('id',$id)->get();
+        $course=Course::with('DiplomaOutlines')->where('slug',$slug)->get();
         $testimonial=Testimonial::all();
         $feedback=Feedback::all();
         return view('web.front.checkout.checkout',compact('course','testimonial','feedback'));

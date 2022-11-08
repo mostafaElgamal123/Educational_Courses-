@@ -21,7 +21,7 @@
     </thead>
     <tbody>
         @foreach($applynow as $apply)
-            <tr>
+            <tr id="{{$apply->id}}">
                 <th scope="row" class="align-middle">{{$loop->iteration}}</th>
                 <td class="align-middle">{{$apply->name}}</td>
                 <td class="align-middle">{{$apply->phone}}</td>
@@ -29,11 +29,7 @@
                 <td class="align-middle">{{$apply->faculty}}</td>
                 <td class="align-middle"><span class="btn btn-info w-40 m-2">{{$apply->Courses->title}}</span></td>
                 <td class="align-middle">
-                    <form action="{{url('/applynows/'.$apply->id)}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                    </form>
+                <button class="btn btn-danger deleteRecord" data-id="{{ $apply->id }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 </td>
             </tr>
         @endforeach
@@ -45,4 +41,25 @@
         {{ $applynow->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowid=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/applynows/"+rowid,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowid: rowid
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

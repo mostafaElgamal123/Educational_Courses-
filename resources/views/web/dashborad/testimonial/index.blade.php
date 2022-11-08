@@ -19,6 +19,7 @@
             <th scope="col">#</th>
             <th scope="col">image</th>
             <th scope="col">title</th>
+            <th scope="col">slug</th>
             <th scope="col">description</th>
             <th scope="col">status</th>
             <th scope="col">edit</th>
@@ -27,10 +28,11 @@
     </thead>
     <tbody>
         @foreach($testimonial as $testimonia)
-            <tr>
+            <tr id="{{$testimonia->id}}">
                 <th scope="row" class="align-middle">{{$loop->iteration}}</th>
-                <td class="align-middle"><img style="width:60px;height:60px;border-radius:50%;" src="{{url('/Images/testimonial/'.$testimonia->image)}}" alt=""></td>
+                <td class="align-middle"><img style="width:60px;height:60px;border-radius:50%;" src="{{asset('storage/'.$testimonia->image)}}" alt=""></td>
                 <td class="align-middle">{{$testimonia->title}}</td>
+                <td class="align-middle">{{$testimonia->slug}}</td>
                 <td class="align-middle">
                 <?php $content_1=substr($testimonia->description,0,50);
                     echo $content_1."...";
@@ -43,13 +45,9 @@
                       <span class="btn btn-warning w-40 m-2">{{$testimonia->status}}</span> 
                     @endif
                 </td>
-                <td class="align-middle"><a href="{{url('/testimonials/'.$testimonia->id."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
+                <td class="align-middle"><a href="{{url('/testimonials/'.$testimonia->slug."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
                 <td class="align-middle">
-                    <form action="{{url('/testimonials/'.$testimonia->id)}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                    </form>
+                <button class="btn btn-danger deleteRecord" data-id="{{ $testimonia->slug }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 </td>
             </tr>
         @endforeach
@@ -61,4 +59,25 @@
         {{ $testimonial->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowslug=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/testimonials/"+rowslug,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowslug: rowslug
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

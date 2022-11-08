@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Dashborad;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Str;
 class CategoryDashControlle extends Controller
 {
     function __construct()
@@ -44,9 +45,14 @@ class CategoryDashControlle extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'       =>'required|min:3|max:150'
+            'name'       =>'required|min:3|max:150',
+            'slug'                =>'required|min:3|max:150'
         ]);
-        $category=Category::create($request->all());
+        $category=new Category();
+        $category->slug=Str::of($request->slug)->slug('-');
+        $category->name=$request->name;
+        $category->save();
+        //$category=Category::create($request->all());
         return back()->with('success','date added successfully');
     }
 
@@ -67,8 +73,9 @@ class CategoryDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($slug)
     {
+        $category=Category::where('slug',$slug)->first();
         return view('web.dashborad.categories.edit',compact('category'));
     }
 
@@ -79,13 +86,17 @@ class CategoryDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Category $category)
+    public function update(Request $request,$slug)
     {
+        $category=Category::where('slug',$slug)->first();
         $request->validate([
-            'name'       =>'required|min:3|max:150'
+            'name'       =>'required|min:3|max:150',
+            'slug'                =>'required|min:3|max:150'
         ]);
+        $category->slug=Str::of($request->slug)->slug('-');
         $category->update($request->except('token'));
-        return back()->with('success','date updated successfully');
+        $category->save();
+        return redirect('categories')->with('success','date updated successfully');
     }
 
     /**
@@ -94,9 +105,14 @@ class CategoryDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($slug)
     {
-        $category->delete();
-        return back()->with('success','date deleted successfully');
+       $category=Category::where('slug',$slug)->first();
+       if($category->delete()){
+        return response()->json([
+            'success' => 'Record deleted successfully!',
+            'id'      =>  $category->id
+        ]);
+        }
     }
 }

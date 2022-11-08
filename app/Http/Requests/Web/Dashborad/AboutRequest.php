@@ -26,11 +26,12 @@ class AboutRequest extends FormRequest
         return [
             'title'               =>'required|min:3|max:150',
             'description'         =>'required|min:3|max:10000',
-            'image'               =>'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image'               =>'required|image|mimes:webp|max:1000',
             'available_subject'   =>'required|numeric',
             'online_courses'      =>'required|numeric',
             'skilled_instructors' =>'required|numeric',
-            'happy_students'      =>'required|numeric'
+            'happy_students'      =>'required|numeric',
+            'slug'                =>'required|min:3|max:150'
         ];
     }
 }

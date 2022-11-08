@@ -21,6 +21,10 @@
                 <input type="text" name="title" value="{{old('title')}}" class="form-control">
             </div>
             <div class="mb-3">
+                <label class="form-label">slug</label>
+                <input type="text" name="slug" value="{{old('slug')}}" class="form-control">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">description</label>
                 <textarea name="description" id="mytextarea" class="form-control" cols="30" rows="10">{{old('description')}}</textarea>
             </div>

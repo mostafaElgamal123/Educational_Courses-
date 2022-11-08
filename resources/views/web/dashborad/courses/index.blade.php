@@ -21,6 +21,7 @@
                 <th scope="col">#</th>
                 <th scope="col">image</th>
                 <th scope="col">title</th>
+                <th scope="col">slug</th>
                 <th scope="col">rating</th>
                 <th scope="col">lectures</th>
                 <th scope="col">Apply Student</th>
@@ -39,10 +40,11 @@
         </thead>
         <tbody>
             @foreach($course as $cour)
-                <tr>
+                <tr id="{{$cour->id}}">
                     <th scope="row" class="align-middle">{{$loop->iteration}}</th>
-                    <td class="align-middle"><img style="width:60px;height:60px;border-radius:50%;" src="{{url('/Images/course/'.$cour->image)}}" alt=""></td>
+                    <td class="align-middle"><img style="width:60px;height:60px;border-radius:50%;" src="{{asset('storage/'.$cour->image)}}" alt=""></td>
                     <td class="align-middle">{{$cour->title}}</td>
+                    <td class="align-middle">{{$cour->slug}}</td>
                     <td class="align-middle">{{$cour->rating}}</td>
                     <td class="align-middle">{{$cour->lectures}}</td>
                     <td class="align-middle">
@@ -53,7 +55,7 @@
                     <td class="align-middle">{{$cour->language}}</td>
                     <td class="align-middle">{{$cour->discount}}</td>
                     <td class="align-middle">
-                    <div class="d-flex flex-row flex-wrap w-100">
+                        <div class="d-flex flex-row flex-wrap w-100">
                             @foreach($cour->DiplomaOutlines as $key=>$value)
                             <span class="btn btn-secondary w-40 m-2">{{$value->level}}</span>
                             @endforeach
@@ -68,14 +70,10 @@
                         <span class="btn btn-warning w-40 m-2">{{$cour->status}}</span> 
                         @endif
                     </td>
-                    <td class="align-middle"><a href="{{url('/courses/'.$cour->id)}}" class="btn btn-primary"><i class="fas fa-folder"></i> show</a></td>
-                    <td class="align-middle"><a href="{{url('/courses/'.$cour->id."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
+                    <td class="align-middle"><a href="{{url('/courses/'.$cour->slug)}}" class="btn btn-primary"><i class="fas fa-folder"></i> show</a></td>
+                    <td class="align-middle"><a href="{{url('/courses/'.$cour->slug."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
                     <td class="align-middle">
-                        <form action="{{url('/courses/'.$cour->id)}}" method="post">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                        </form>
+                    <button class="btn btn-danger deleteRecord" data-id="{{ $cour->slug }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                     </td>
                 </tr>
             @endforeach
@@ -87,4 +85,25 @@
         {{ $course->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowslug=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/courses/"+rowslug,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowslug: rowslug
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

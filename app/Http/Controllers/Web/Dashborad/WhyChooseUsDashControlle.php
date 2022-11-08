@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\WhyChooseUs;
 use App\Http\Requests\Web\Dashborad\WhyChooseUsRequest;
+use Storage;
+use Illuminate\Support\Str;
 class WhyChooseUsDashControlle extends Controller
 {
     function __construct()
@@ -54,12 +56,14 @@ class WhyChooseUsDashControlle extends Controller
         $request->validated();
         $whychoose=new WhyChooseUs;
         if($whychoose->count()<1):
-            $whychoose=WhyChooseUs::create($request->all());
-            if($request->file('image')){
+            if($request->hasFile('image')){
                 $file= $request->file('image');
-                $filename= date('YmdHi').$file->getClientOriginalName();
-                $file-> move(public_path('/Images/whychooseus'), $filename);
-                $whychoose->image= $filename;
+                $destination_path='images/whychoose/';
+                $filename=date('YmdHi').$file->getClientOriginalName();
+                $path =$request->file('image')->storeAs($destination_path,$filename);
+                $whychoose=WhyChooseUs::create($request->all());
+                $whychoose->image= $path;
+                $whychoose->slug=Str::of($request->slug)->slug('-');
                 $whychoose->save();
             }
             $whychoose=WhyChooseUs::all();
@@ -76,9 +80,9 @@ class WhyChooseUsDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $whychooseus=WhyChooseUs::where('id',$id)->first();
+        $whychooseus=WhyChooseUs::where('slug',$slug)->first();
         return view('web.dashborad.why-choose-us.show',compact('whychooseus'));
     }
 
@@ -88,8 +92,9 @@ class WhyChooseUsDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(WhyChooseUs $whychoose)
+    public function edit($slug)
     {
+        $whychoose=WhyChooseUs::where('slug',$slug)->first();
         return view('web.dashborad.why-choose-us.edit',compact('whychoose'));
     }
 
@@ -104,19 +109,17 @@ class WhyChooseUsDashControlle extends Controller
     {
         // Retrieve the validated input data...
         $request->validated();
-        if($request->has('image')){
-            $file1= $request->file('image');
-            $filename1= date('YmdHi').$file1->getClientOriginalName();
-            $file1-> move(public_path('/Images/whychooseus'), $filename1);
-            $image_path1 = public_path('/Images/whychooseus').'/'.$whychoose->image;
-            if(file_exists($image_path1)):
-               unlink($image_path1);
-            endif;
+        if($request->hasFile('image')){
+            $file= $request->file('image');
+            $destination_path='images/whychoose/';
+            $filename=date('YmdHi').$file->getClientOriginalName();
+            $path =$request->file('image')->storeAs($destination_path,$filename);
+            if(Storage::delete($whychoose->image)){
             $whychoose->update($request->all());
-            $whychoose->image= $filename1;
+            $whychoose->image= $path;
+            $whychoose->slug=Str::of($request->slug)->slug('-');
             $whychoose->save();
-        }else{
-            $whychoose=WhyChooseUs::update($request->all());
+        }
         }
         return back()->with('success','date updated successfully');
     }
@@ -127,13 +130,16 @@ class WhyChooseUsDashControlle extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(WhyChooseUs $whychoose)
+    public function destroy($slug)
     {
-        $image_path = public_path('/Images/whychooseus').'/'.$whychoose->image;
-        if(file_exists($image_path)):
-            unlink($image_path);
-        endif;
-        $whychoose->delete();
-        return back()->with('success','date deleted successfully');
+        $whychoose=WhyChooseUs::where('slug',$slug)->first();
+        if(Storage::delete($whychoose->image)) {
+            if($whychoose->delete()){
+                return response()->json([
+                    'success' => 'Record deleted successfully!',
+                    'id'      =>  $whychoose->id
+                ]);
+            }
+         }
     }
 }

@@ -21,6 +21,10 @@
                 <input type="text" name="name" value="{{old('name')}}" class="form-control">
             </div>
             <div class="mb-3">
+                <label class="form-label">slug</label>
+                <input type="text" name="slug" value="{{old('slug')}}" class="form-control">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">email</label>
                 <input type="email" name="email" value="{{old('email')}}" class="form-control">
             </div>

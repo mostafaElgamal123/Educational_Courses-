@@ -270,13 +270,27 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{url('/contacts')}}" class="nav-link">
+            <a href="#!" class="nav-link">
                 <i class="nav-icon far fa-envelope"></i>
                 <p>
                     message
                 </p>
                 <span class="badge badge-warning navbar-badge">{{Contact::all()->count()}}</span>
             </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{url('/contacts')}}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>view message</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{url('/send-mail')}}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>send mail</p>
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </nav>

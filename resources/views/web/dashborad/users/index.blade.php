@@ -29,7 +29,7 @@
       </thead>
       <tbody>
       @foreach ($data as $key => $user)
-        <tr>
+        <tr id="{{$user->id}}">
           <td scope="row" class="align-middle">{{$loop->iteration}}</td>
           <td class="align-middle">{{ $user->name }}</td>
           <td class="align-middle">{{ $user->email }}</td>
@@ -54,11 +54,7 @@
           </td>
           <td class="align-middle">
                 @can('user-delete')
-                <form action="{{route('users.destroy',$user->id)}}" method="post">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                </form>
+                <button class="btn btn-danger deleteRecord" data-id="{{ $user->id }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 @endcan
           </td>
         </tr>
@@ -71,4 +67,25 @@
         {{ $data->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowid=$(this).attr('data-id');
+        $.ajax({
+            url: "http://127.0.0.1:8000/users/"+rowid,
+            method: 'delete',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowid: rowid
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

@@ -8,7 +8,7 @@
         <div class="owl-carousel team-carousel position-relative" style="padding: 0 30px;">
         @foreach($instructor as $instruct)
             <div class="team-item">
-                <img class="img-fluid w-100" src="{{url('Images/instructor/'.$instruct->image)}}" alt="">
+                <img class="img-fluid w-100" src="{{asset('storage/'.$instruct->image)}}" alt="">
                 <div class="bg-light text-center p-4">
                     <h5 class="mb-3">{{$instruct->name}}</h5>
                     <p class="mb-2">{{$instruct->categories->name}}</p>

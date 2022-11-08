@@ -26,7 +26,7 @@ class CourseRequest extends FormRequest
         return [
             'title'               =>'required|min:3|max:150',
             'description'         =>'required|min:3|max:100000',
-            'image'               =>'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image'               =>'required|mimes:webp|max:1000',
             'rating'              =>'required|numeric|between:0,99.99',
             'lectures'            =>'required|nullable|regex:/^(\d+(,\d{1,2})?)?$/',
             'duration'            =>'required|nullable|regex:/^(\d+(,\d{1,2})?)?$/',
@@ -34,7 +34,8 @@ class CourseRequest extends FormRequest
             'language'            =>'required|min:3|max:25',
             'discount'            =>'required|nullable|regex:/^(\d+(,\d{1,2})?)?$/',
             'category_id'         =>'required|',
-            'instructor_id'       =>'required|'
+            'instructor_id'       =>'required|',
+            'slug'                =>'required|min:3|max:150'
         ];
     }
 }

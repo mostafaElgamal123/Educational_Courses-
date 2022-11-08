@@ -18,6 +18,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">name</th>
+            <th scope="col">slug</th>
             <th scope="col">instructors</th>
             <th scope="col">courses</th>
             <th scope="col">edit</th>
@@ -26,9 +27,10 @@
     </thead>
     <tbody>
         @foreach($category as $cate)
-            <tr>
+            <tr id="{{$cate->id}}">
                 <th scope="row" class="align-middle">{{$loop->iteration}}</th>
                 <td class="align-middle">{{$cate->name}}</td>
+                <td class="align-middle">{{$cate->slug}}</td>
                 <td class="align-middle">
                     <div class="d-flex flex-row flex-wrap w-100">
                         @foreach($cate->instructors as $key=>$value)
@@ -43,13 +45,9 @@
                         @endforeach
                     </div>
                 </td>
-                <td class="align-middle"><a href="{{url('/categories/'.$cate->id."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
+                <td class="align-middle"><a href="{{url('/categories/'.$cate->slug."/edit")}}" class="btn btn-info"><i class="fas fa-edit"></i> edit</a></td>
                 <td class="align-middle">
-                    <form action="{{url('/categories/'.$cate->id)}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
-                    </form>
+                    <button class="btn btn-danger deleteRecord" data-id="{{ $cate->slug }}"><i class="fa fa-trash" aria-hidden="true"></i> delete</button>
                 </td>
             </tr>
         @endforeach
@@ -61,4 +59,26 @@
         {{ $category->links('web.dashborad.pagination.custom') }}
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.deleteRecord').on('click',function(){
+        const rowslug=$(this).attr('data-id');
+        console.log(rowslug);
+        $.ajax({
+            url: "http://127.0.0.1:8000/categories/"+rowslug,
+            method: 'DELETE',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                rowslug: rowslug
+            },
+            success: function(result){
+                console.log(result);
+                alert(result.success);
+                $('#'+result.id).remove();
+            }
+        });
+    })
+</script>
 @endsection

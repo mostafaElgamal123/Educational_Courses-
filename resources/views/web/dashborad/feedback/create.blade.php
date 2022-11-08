@@ -21,6 +21,10 @@
                 <input type="url" name="feedback" value="{{old('feedback')}}" class="form-control">
             </div>
             <div class="mb-3">
+                <label class="form-label">slug</label>
+                <input type="text" name="slug" value="{{old('slug')}}" class="form-control">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">status</label>
                 <select name="status" value="{{old('status')}}" class="form-select">
                     <option selected>publish</option>
